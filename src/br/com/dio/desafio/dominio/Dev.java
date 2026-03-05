@@ -61,6 +61,20 @@ public class Dev {
     public void setConteudosConcluidos(Set<Conteudo> conteudosConcluidos) {
         this.conteudosConcluidos = conteudosConcluidos;
     }
+    
+    public String calcularNivel() {
+    	double xp = calcularTotalXp();
+        
+        if (xp <= 20) {
+            return "Iniciante";
+        } else if (xp <= 50) {
+            return "Intermediário";
+        } else if (xp <= 100) {
+            return "Avançado";
+        } else {
+            return "Expert";
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -73,5 +87,17 @@ public class Dev {
     @Override
     public int hashCode() {
         return Objects.hash(nome, conteudosInscritos, conteudosConcluidos);
+    }
+    
+    public double calcularTotalXpComBonus() {
+        double soma = calcularTotalXp();
+        
+        long mentoriasConcluidas = this.conteudosConcluidos.stream()
+                .filter(c -> c instanceof Mentoria)
+                .count();
+        
+        soma += mentoriasConcluidas * 5;
+        
+        return soma;
     }
 }
